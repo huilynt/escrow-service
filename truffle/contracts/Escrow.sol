@@ -1,8 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import "truffle/console.sol";
-
 contract Escrow {
     address private fromAddr;
     address private toAddr;
@@ -43,7 +41,6 @@ contract Escrow {
     function withdraw() public {
         if (block.timestamp >= revertTimestamp) {
             withdrawalAddr = fromAddr;
-            console.log("change withdrawalAddr:", withdrawalAddr);
         }
         require(
             msg.sender == withdrawalAddr,

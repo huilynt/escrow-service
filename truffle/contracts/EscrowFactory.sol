@@ -36,7 +36,6 @@ contract EscrowFactory {
     }
 
     function getUserToEscrow() public view returns (address[] memory) {
-        console.log(msg.sender);
         return userToEscrow[msg.sender];
     }
 

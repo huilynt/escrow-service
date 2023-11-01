@@ -119,13 +119,7 @@
         }
       ],
       "name": "create",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "escrowAddr",
-          "type": "address"
-        }
-      ],
+      "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },

@@ -21,7 +21,7 @@ const handleSubmit = (event) => {
   // });
 };
 
-const ESCROWFACTORY_ADDRESS = "0x713b06C827FFc95084583b02c7380ae8Ae9d1a03";
+const ESCROWFACTORY_ADDRESS = "0x4B3716663d23d61Ab9BFF651c86F2F29940A1Fed";
 const ESCROWFACTORY_ABI = require("./ABI/EscrowFactory.json").abi;
 const ESCROW_ABI = require("./ABI/Escrow.json").abi;
 
@@ -38,8 +38,6 @@ class Home extends Component {
       ...props,
     };
   }
-
-  componentDidMount() {}
 
   render() {
     console.log("transfer", this.state);
@@ -70,14 +68,22 @@ class Home extends Component {
       ESCROWFACTORY_ADDRESS
     );
 
-    console.log(ESCROWFACTORY_CONTRACT);
+    console.log("ESCROWFACTORY_CONTRACT",ESCROWFACTORY_CONTRACT);
 
     const handleCreateEscrow = async (e) => {
       e.preventDefault();
-      console.log(this.state.selectedAddr)
-      const escrow_contract = await ESCROWFACTORY_CONTRACT.methods
-        .create(this.state.toAddress, WITHDRAWAL_DURATION)
-        .send({ from: this.state.selectedAddr, value: 1000000000000000000 });
+      // try {
+        
+      // } catch (error) {
+      //   console.log(error);
+      // }
+      console.log("this.state.selectedAddr",this.state.selectedAddr);
+        ESCROWFACTORY_CONTRACT.methods
+          .create(this.state.toAddress, WITHDRAWAL_DURATION)
+          .send({ from: this.state.selectedAddr,gasLimit: 150000 })
+          .then(function(receipt) {
+            console.log(receipt)
+          });
     };
 
     return (
@@ -95,7 +101,7 @@ class Home extends Component {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleCreateEscrow}
+            // onSubmit={handleCreateEscrow}
             noValidate
             sx={{ mt: 1 }}
           >
@@ -142,7 +148,7 @@ class Home extends Component {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={async () => {}}
+              onClick={handleCreateEscrow}
             >
               Create Escrow
             </Button>
