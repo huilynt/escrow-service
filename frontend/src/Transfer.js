@@ -21,7 +21,7 @@ const handleSubmit = (event) => {
   // });
 };
 
-const ESCROWFACTORY_ADDRESS = "0x4B3716663d23d61Ab9BFF651c86F2F29940A1Fed";
+const ESCROWFACTORY_ADDRESS = "0x26e80a5F533af6E2694CBD565008c4353429003A";
 const ESCROWFACTORY_ABI = require("./ABI/EscrowFactory.json").abi;
 const ESCROW_ABI = require("./ABI/Escrow.json").abi;
 
@@ -35,6 +35,8 @@ class Home extends Component {
       balance: 0,
       amount: 0,
       toAddress: "",
+      childAddress: "",
+      withdrawalDuration: 3600,
       ...props,
     };
   }
@@ -47,6 +49,10 @@ class Home extends Component {
     const handleChange = (event) => {
       this.setState({ selectedAddr: event.target.value });
       getBalance(event.target.value);
+    };
+
+    const handleWithdrawalDurationChange = (event) => {
+      this.setState({ withdrawalDuration: event.target.value });
     };
 
     const handleAmountChange = (event) => {
@@ -68,22 +74,27 @@ class Home extends Component {
       ESCROWFACTORY_ADDRESS
     );
 
-    console.log("ESCROWFACTORY_CONTRACT",ESCROWFACTORY_CONTRACT);
+    console.log("ESCROWFACTORY_CONTRACT", ESCROWFACTORY_CONTRACT);
 
     const handleCreateEscrow = async (e) => {
       e.preventDefault();
-      // try {
-        
-      // } catch (error) {
-      //   console.log(error);
-      // }
-      console.log("this.state.selectedAddr",this.state.selectedAddr);
-        ESCROWFACTORY_CONTRACT.methods
-          .create(this.state.toAddress, WITHDRAWAL_DURATION)
-          .send({ from: this.state.selectedAddr,gasLimit: 150000 })
-          .then(function(receipt) {
-            console.log(receipt)
-          });
+      this.setState({
+        childAddress: "0x5C9eb5D6a6C2c1B3EFc52255C0b356f116f6f66D",
+        selectedAddr: "",
+        balance: 0,
+        amount: 0,
+        toAddress: "",
+        withdrawalDuration: 0
+      });
+      e.target.reset();
+
+      // console.log("this.state.selectedAddr", this.state.selectedAddr);
+      // ESCROWFACTORY_CONTRACT.methods
+      //   .createEscrow(this.state.toAddress, WITHDRAWAL_DURATION)
+      //   .send({ from: this.state.selectedAddr, gasLimit: '200000', value:0 })
+      //   .then(function (receipt) {
+      //     console.log(receipt);
+      //   });
     };
 
     return (
@@ -101,8 +112,7 @@ class Home extends Component {
           </Typography>
           <Box
             component="form"
-            // onSubmit={handleCreateEscrow}
-            noValidate
+            onSubmit={handleCreateEscrow}
             sx={{ mt: 1 }}
           >
             <FormControl fullWidth>
@@ -115,6 +125,7 @@ class Home extends Component {
                 value={this.state.selectedAddr}
                 label="From Address"
                 onChange={handleChange}
+                required
               >
                 {this.state.accounts.map((addr) => {
                   return <MenuItem value={addr}>{addr}</MenuItem>;
@@ -139,19 +150,39 @@ class Home extends Component {
               fullWidth
               name="amount"
               label="Amount in ETH"
-              type="amount"
               id="amount"
+              type="number"
+              InputLabelProps={{
+                shrink: true,
+              }}
               onChange={handleAmountChange}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="withdrawalduration"
+              label="Withdrawal duration (in days)"
+              id="withdrawalduration"
+              type="number"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={handleWithdrawalDurationChange}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={handleCreateEscrow}
             >
               Create Escrow
             </Button>
+            {this.state.childAddress != "" && (
+              <Alert severity="success">
+                Escrow Contract created at {this.state.childAddress}
+              </Alert>
+            )}
           </Box>
         </Box>
       </Container>

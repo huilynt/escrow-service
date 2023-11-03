@@ -66,7 +66,8 @@ export default function App() {
         method: "eth_requestAccounts",
       });
       setAccounts(accounts);
-      console.log("app.js", accounts)
+      setIsConnected(true);
+      console.log("app.js", accounts);
     } catch (error) {
       setIsConnected(false);
     }
@@ -76,12 +77,10 @@ export default function App() {
     setValue(newValue);
   };
 
-  if (!haveMetamask || !isConnected  || accounts.length == 0) {
+  if (!haveMetamask || !isConnected || accounts.length == 0) {
     return (
       <Container component="main" maxWidth="xs">
-        <Alert severity="error">
-          Please install MetaMask extension first.
-        </Alert>
+        <Alert severity="error">Please install MetaMask extension first.</Alert>
       </Container>
     );
   }

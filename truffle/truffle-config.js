@@ -42,7 +42,7 @@
  */
 
 require("dotenv").config();
-const { MNEMONIC, PROJECT_ID } = process.env;
+const { MNEMONIC, PROJECT_ID, ETHERSCAN_API_KEY } = process.env;
 
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
@@ -155,4 +155,9 @@ module.exports = {
     port: 24012,
     host: "localhost",
   },
+  plugins: ['truffle-plugin-verify'],
+  api_keys: {
+    etherscan: ETHERSCAN_API_KEY
+  }
+  
 };
