@@ -151,7 +151,7 @@ class Home extends Component {
               name="amount"
               label="Amount in ETH"
               id="amount"
-              type="number"
+              // type="number"
               InputLabelProps={{
                 shrink: true,
               }}
